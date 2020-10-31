@@ -2,7 +2,7 @@
   "name": "jogo-da-velha",
   "version": "1.0.0",
   "description": "Jogo da velha com javascript",
-  "main": "index.js",
+  "main": "index.html",
   "author": "Lucas Emanuel",
   "license": "MIT"
 }
