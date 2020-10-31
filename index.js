@@ -9,6 +9,7 @@ class Game {
       element.addEventListener('click', this.updateGame)
     })
 
+    this.hasWinner = false
     this.board = []
     this.clearCells()
   }
@@ -31,10 +32,20 @@ class Game {
   }
 
   updateGame = e => {
+    if (this.hasWinner === true)
+      return;
+
     this.fillCell(e)
+
+    if (this.existWinner()) {
+      this.hasWinner = true;
+      const el = document.querySelector('div.winner');
+      el.children[0].innerText = `Vencedor da partida é o "${this.player}"`
+      el.style.display = 'flex'
+      el.style.opacity = '1'
+    }
+
     this.changePlayer()
-    
-    if(this.existWinner()) alert('winnner')
   }
 
   existWinner = () => {

@@ -17,20 +17,33 @@ body {
   background: #373a40;
 }
 
+main {
+  padding: 16px;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+h1 {
+  font-size: 48px;
+}
+
 section.board {
-  width: 600px;
+  max-width: 480px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
 }
 
 div.cell {
-  width: 200px;
-  height: 200px;
-  border: 4px solid #eeeeee;
-  font-size: 12em;
+  width: 160px;
+  height: 160px;
+  border: 4px solid #686d76;
+  font-size: 8em;
   font-weight: 400;
   text-align: center;
-  line-height: 200px;
+  line-height: 160px;
 }
 
 div.cell:nth-child(3n) {
@@ -47,4 +60,22 @@ div.cell:nth-child(n + 7) {
 
 div.cell:nth-last-child(n + 7) {
   border-top: none;
+}
+
+div.winner {
+  display: none;
+  position: absolute;
+  height: 100vh;
+  width: 100vw;
+  padding: 26px;
+  background: #373a40F0;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+div.winner p {
+  font-weight: bold;
+  font-size: 52px;
+  color: #eeeeee;
 }
