@@ -92,3 +92,7 @@ document.querySelectorAll('.reset').forEach(el => {
     el.style.display = 'none'
   })
 })
+
+const date = new Date()
+const year = date.getFullYear()
+document.querySelector('span.year').innerText = year
