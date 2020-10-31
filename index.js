@@ -34,38 +34,30 @@ class Game {
     this.fillCell(e)
     this.changePlayer()
     
-    if(this.existWinner() || this.verityRows() || this.verityDiagonal()) alert('winnner')
+    if(this.existWinner()) alert('winnner')
   }
 
   existWinner = () => {
-    return this.verityColumns()
+    return this.verityColumns() || this.verityRows() || this.verityDiagonal()
   }
 
   verityColumns = () => {
-    let column = 0
-
-    while (column < 3) {
-      if (this.board[0 + column] !== undefined 
-        && this.board[0 + column] === this.board[3 + column]
-        && this.board[3 + column] === this.board[6 + column]) {
+    for (let i = 0; i < 3; i++) {
+      if (this.board[0 + i] !== undefined 
+        && this.board[0 + i] === this.board[3 + i]
+        && this.board[3 + i] === this.board[6 + i]) {
         return true
       }
-
-      column++
     }
   }
 
   verityRows = () => {
-    let column = 0
-
-    while (column < 9) {
-      if (this.board[0 + column] !== undefined 
-        && this.board[0 + column] === this.board[1 + column]
-        && this.board[1 + column] === this.board[2 + column]) {
+    for (let i = 0; i < 9; i += 3) {
+      if (this.board[0 + i] !== undefined 
+        && this.board[0 + i] === this.board[1 + i]
+        && this.board[1 + i] === this.board[2 + i]) {
         return true
       }
-
-      column += 3
     }
   }
 
