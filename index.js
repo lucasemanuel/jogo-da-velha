@@ -33,16 +33,15 @@ class Game {
 
   updateGame = e => {
     if (this.hasWinner === true)
-      return;
+      return
 
     this.fillCell(e)
 
     if (this.existWinner()) {
-      this.hasWinner = true;
-      const el = document.querySelector('div.winner');
+      this.hasWinner = true
+      const el = document.querySelector('div.winner')
       el.children[0].innerText = `Vencedor da partida é o "${this.player}"`
       el.style.display = 'flex'
-      el.style.opacity = '1'
     }
 
     this.changePlayer()
@@ -79,4 +78,17 @@ class Game {
   }
 }
 
-new Game()
+const game = new Game()
+
+document.querySelectorAll('.reset').forEach(el => {
+  el.addEventListener('click', e => {
+    game.clearCells()
+    game.player = [game.player1, game.player2][Math.floor(Math.random() * 2)]
+    game.hasWinner = false
+    game.board = []
+  
+    const el = document.querySelector('div.winner');
+    el.children[0].innerText = ''
+    el.style.display = 'none'
+  })
+})
