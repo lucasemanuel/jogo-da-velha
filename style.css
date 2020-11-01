@@ -71,7 +71,9 @@ footer {
 }
 
 div.winner {
-  display: none;
+  display: flex;
+  opacity: 0;
+  visibility: hidden;
   position: absolute;
   height: 100vh;
   width: 100vw;
@@ -81,6 +83,13 @@ div.winner {
   align-items: center;
   text-align: center;
   flex-direction: column;
+  -webkit-transition: opacity 0.5s, visibility 0.5s;
+  transition: opacity 0.5s, visibility 0.5s;
+}
+
+div.winner.show-screen {
+  visibility: visible;
+  opacity: 1;
 }
 
 div.winner p {

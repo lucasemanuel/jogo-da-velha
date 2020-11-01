@@ -2,7 +2,7 @@ class Game {
   constructor() {
     this.player1 = 'X'
     this.player2 = 'O'
-    this.player = [this.player1, this.player2][Math.floor(Math.random() * 2)]
+    this.currentPlayer = this.initPlayer = [this.player1, this.player2][Math.floor(Math.random() * 2)]
 
     this.cells = document.querySelectorAll('div.cell')
     this.cells.forEach(element => {
@@ -20,15 +20,15 @@ class Game {
 
   fillCell = e => {
     if (e.target.innerText === '') {
-      e.target.innerText = this.player
+      e.target.innerText = this.currentPlayer
 
       const id = e.target.id.substr(-1, 1) 
-      this.board[id - 1] = this.player
+      this.board[id - 1] = this.currentPlayer
     }
   }
 
   changePlayer = () => {
-    this.player = this.player === 'X' ? 'O' : 'X'
+    this.currentPlayer = this.currentPlayer === 'X' ? 'O' : 'X'
   }
 
   updateGame = e => {
@@ -38,17 +38,19 @@ class Game {
     this.fillCell(e)
 
     if (this.existWinner()) {
-      this.hasWinner = true
+      this.hasWinner
       const el = document.querySelector('div.winner')
-      el.children[0].innerText = `Vencedor da partida é o "${this.player}"`
-      el.style.display = 'flex'
+      const playerWinner = (this.currentPlayer === this.initPlayer) ? 'Jogador 1' : 'Jogador 2' 
+      el.children[0].innerText = `${playerWinner} é o vencedor!!!`
+      el.classList.add('show-screen')
     }
 
     this.changePlayer()
   }
 
   existWinner = () => {
-    return this.verityColumns() || this.verityRows() || this.verityDiagonal()
+    this.hasWinner = (this.verityColumns() || this.verityRows() || this.verityDiagonal())
+    return this.hasWinner
   }
 
   verityColumns = () => {
@@ -83,13 +85,13 @@ const game = new Game()
 document.querySelectorAll('.reset').forEach(el => {
   el.addEventListener('click', e => {
     game.clearCells()
-    game.player = [game.player1, game.player2][Math.floor(Math.random() * 2)]
+    game.currentPlayer = game.initPlayer = [game.player1, game.player2][Math.floor(Math.random() * 2)]
     game.hasWinner = false
     game.board = []
   
     const el = document.querySelector('div.winner');
     el.children[0].innerText = ''
-    el.style.display = 'none'
+    el.classList.remove('show-screen')
   })
 })
 
