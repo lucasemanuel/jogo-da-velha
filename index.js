@@ -21,6 +21,7 @@ class Game {
   fillCell = e => {
     if (e.target.innerText === '') {
       e.target.innerText = this.currentPlayer
+      this.changePlayer()
 
       const id = e.target.id.substr(-1, 1) 
       this.board[id - 1] = this.currentPlayer
@@ -38,14 +39,13 @@ class Game {
     this.fillCell(e)
 
     if (this.existWinner()) {
+      this.changePlayer()
       this.hasWinner
       const el = document.querySelector('div.winner')
       const playerWinner = (this.currentPlayer === this.initPlayer) ? 'Jogador 1' : 'Jogador 2' 
       el.children[0].innerText = `${playerWinner} é o vencedor!!!`
       el.classList.add('show-screen')
     }
-
-    this.changePlayer()
   }
 
   existWinner = () => {
