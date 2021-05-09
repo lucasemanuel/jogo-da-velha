@@ -106,9 +106,9 @@ body {
 .screen-winner--have-winner {
   display: block;
 
-  -webkit-animation: slide 3s ease-in;
-  -moz-animation: slide 3s ease-in;
-  animation: slide 3s ease-in;
+  -webkit-animation: slide 1s ease-in;
+  -moz-animation: slide 1s ease-in;
+  animation: slide 1s ease-in;
 }
 
 .screen-winner__section {
