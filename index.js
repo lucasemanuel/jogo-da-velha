@@ -1,99 +1,126 @@
+const X = 'X'
+const O = 'O'
 class Game {
-  constructor() {
-    this.player1 = 'X'
-    this.player2 = 'O'
-    this.currentPlayer = this.initPlayer = [this.player1, this.player2][Math.floor(Math.random() * 2)]
+  constructor () {
+    this.playerX = X
+    this.playerO = O
+    this.current = this.initPlayer = [this.playerX, this.playerO][
+      Math.floor(Math.random() * 2)
+    ]
 
-    this.cells = document.querySelectorAll('div.cell')
-    this.cells.forEach(element => {
-      element.addEventListener('click', this.updateGame)
+    this.cells = document.querySelectorAll('.board__cell')
+    this.cells.forEach((element, index) => {
+      element.addEventListener('click', e => {
+        if (!this.isWinner()) this.handleClick(e, index)
+      })
     })
 
-    this.hasWinner = false
-    this.board = []
+    this.cellsWinner = []
+    this.board = Array(9).fill(undefined)
     this.clearCells()
   }
 
-  clearCells = () => {
-    this.cells.forEach(element => element.innerText = '')
+  handleClick = async (e, index) => {
+    this.board[index] = this.current
+    this.updateCell(e, index)
+
+    if (this.isWinner()) {
+      this.setResult(this.current)
+    } else if (this.isTied()) {
+      this.setResult()
+    } else {
+      this.changePlayer()
+    }
   }
 
-  fillCell = e => {
+  setResult = (winner = undefined) => {
+    let timer = 1800
+    if (winner) {
+      const el = document.querySelector('.screen-winner__player')
+      el.innerText = winner
+      this.cellsWinner.forEach(value => {
+        this.cells[value].classList.add('board__cell--winner')
+      })
+    } else {
+      const el = document.querySelector('.screen-winner__title')
+      el.innerText = 'EMPATE'
+      timer = 500
+    }
+
+    setTimeout(() => {
+      document
+        .querySelector('.screen-winner')
+        .classList.add('screen-winner--have-winner')
+    }, timer)
+  }
+
+  updateCell = e => {
     if (e.target.innerText === '') {
-      e.target.innerText = this.currentPlayer
-      this.changePlayer()
-
-      const id = e.target.id.substr(-1, 1) 
-      this.board[id - 1] = this.currentPlayer
+      e.target.innerText = this.current
+      e.target.classList.add(`board__cell--player${this.current}`)
     }
   }
 
-  changePlayer = () => {
-    this.currentPlayer = this.currentPlayer === 'X' ? 'O' : 'X'
-  }
+  clearCells = () => this.cells.forEach(element => (element.innerText = ''))
 
-  updateGame = e => {
-    if (this.hasWinner === true)
-      return
+  changePlayer = () => (this.current = this.current === X ? O : X)
 
-    this.fillCell(e)
+  isTied = () => this.board.filter(value => value === undefined).length === 0
 
-    if (this.existWinner()) {
-      this.changePlayer()
-      this.hasWinner
-      const el = document.querySelector('div.winner')
-      const playerWinner = (this.currentPlayer === this.initPlayer) ? 'Jogador 1' : 'Jogador 2' 
-      el.children[0].innerText = `${playerWinner} é o vencedor!!!`
-      el.classList.add('show-screen')
-    }
-  }
+  isWinner = () => this.inColumns() || this.inRows() || this.inDiagonal()
 
-  existWinner = () => {
-    this.hasWinner = (this.verityColumns() || this.verityRows() || this.verityDiagonal())
-    return this.hasWinner
-  }
-
-  verityColumns = () => {
+  inColumns = () => {
     for (let i = 0; i < 3; i++) {
-      if (this.board[0 + i] !== undefined 
-        && this.board[0 + i] === this.board[3 + i]
-        && this.board[3 + i] === this.board[6 + i]) {
+      if (
+        this.board[i] !== undefined &&
+        this.board[i] === this.board[i + 3] &&
+        this.board[i + 3] === this.board[i + 6]
+      ) {
+        this.cellsWinner = [i, i + 3, i + 6]
         return true
       }
     }
   }
 
-  verityRows = () => {
+  inRows = () => {
     for (let i = 0; i < 9; i += 3) {
-      if (this.board[0 + i] !== undefined 
-        && this.board[0 + i] === this.board[1 + i]
-        && this.board[1 + i] === this.board[2 + i]) {
+      if (
+        this.board[i] !== undefined &&
+        this.board[i] === this.board[i + 1] &&
+        this.board[i + 1] === this.board[i + 2]
+      ) {
+        this.cellsWinner = [i, i + 1, i + 2]
+
         return true
       }
     }
   }
 
-  verityDiagonal = () => {
-    return this.board[4] !== undefined
-      && ((this.board[0] === this.board[4] && this.board[4] === this.board[8])
-      || (this.board[2] === this.board[4] && this.board[4] === this.board[6]))
+  inDiagonal = () => {
+    if (
+      this.board[4] !== undefined &&
+      this.board[0] === this.board[4] &&
+      this.board[4] === this.board[8]
+    ) {
+      this.cellsWinner = [0, 4, 8]
+      return true
+    } else if (
+      this.board[4] !== undefined &&
+      this.board[2] === this.board[4] &&
+      this.board[4] === this.board[6]
+    ) {
+      this.cellsWinner = [2, 4, 6]
+      return true
+    }
   }
 }
 
-const game = new Game()
-
-document.querySelectorAll('.reset').forEach(el => {
-  el.addEventListener('click', e => {
-    game.clearCells()
-    game.currentPlayer = game.initPlayer = [game.player1, game.player2][Math.floor(Math.random() * 2)]
-    game.hasWinner = false
-    game.board = []
-  
-    const el = document.querySelector('div.winner');
-    el.children[0].innerText = ''
-    el.classList.remove('show-screen')
+document
+  .querySelector('.screen-winner__reset')
+  .addEventListener('click', () => {
+    document.location.reload()
   })
-})
+const game = new Game()
 
 const date = new Date()
 const year = date.getFullYear()
